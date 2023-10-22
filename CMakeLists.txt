@@ -7,18 +7,29 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
-add_executable(icp_slam src/icp_slam.cpp)
-target_include_directories(icp_slam PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_compile_features(icp_slam PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+add_executable(icp_slam_node 
+    src/icp_slam.cpp
+    src/main.cpp
+)
 
-install(TARGETS icp_slam
-  DESTINATION lib/${PROJECT_NAME})
+target_compile_features(icp_slam_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+target_include_directories(icp_slam_node PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+ament_target_dependencies(icp_slam_node 
+    rclcpp 
+    sensor_msgs
+)
+
+install(TARGETS icp_slam_node
+    DESTINATION lib/${PROJECT_NAME}
+ )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
