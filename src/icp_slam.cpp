@@ -13,8 +13,11 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
 void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
     RCLCPP_INFO(get_logger(), "Received pointcloud message");
     msg_handler_->insertPointCloudMsg(msg);
-    RCLCPP_INFO(get_logger(), "pooint cloud size is %ld", msg_handler_->getPointCloudQueueSize());
-    
+    RCLCPP_INFO(get_logger(), "point cloud size is %ld", msg_handler_->getPointCloudQueueSize());
+    auto point_cloud = msg_handler_->getXYZ();
+    //for (pcl::PointCloud<pcl::PointXYZ>::iterator it = point_cloud->begin(); it != point_cloud->end(); ++ it) {
+    //    RCLCPP_INFO(get_logger(), "point cloud x = %f, y = %f, z = %f", it->x, it->y, it->z);
+    //}
 }
 
 void ICP_SLAM::imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg) {
