@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 add_executable(icp_slam_node 
+    src/msg_handler.cpp
     src/icp_slam.cpp
     src/main.cpp
 )
