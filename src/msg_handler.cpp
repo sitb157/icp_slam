@@ -1,7 +1,7 @@
 #include "icp_slam/msg_handler.hpp"
 
 MsgHandler::MsgHandler() {
-    //Initialize
+    // Initialize
     pointcloudQueue_ = std::make_shared<std::deque<sensor_msgs::msg::PointCloud2::SharedPtr>>();
 }
 
@@ -33,11 +33,10 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::convertToXYZ(const sensor_msgs::
 }
 
 
-pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::getXYZ() {
+pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::getConvertedPointCloud() {
 
     // Get data and pop
     const sensor_msgs::msg::PointCloud2::SharedPtr output = pointcloudQueue_->front();
     pointcloudQueue_->pop_front(); 
-
     return convertToXYZ(output);
 }

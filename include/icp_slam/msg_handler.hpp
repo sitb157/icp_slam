@@ -1,6 +1,10 @@
 #ifndef MSG_HANDLER_HPP_
 #define MSG_HANDLER_HPP_
 
+/**
+ * @brief storage for msgs 
+ */
+
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/point_cloud2_iterator.hpp"
@@ -10,10 +14,6 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <memory>
 #include <deque>
-
-/**
- * @brief storage for msgs 
- */
 
 
 class MsgHandler {
@@ -25,8 +25,7 @@ class MsgHandler {
         void insertPointCloudMsg(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
         
         // Get xyz Data    
-        pcl::PointCloud<pcl::PointXYZ>::Ptr getXYZ(); 
-
+        pcl::PointCloud<pcl::PointXYZ>::Ptr getConvertedPointCloud(); 
 
         // Get pointcloud queue size 
         size_t getPointCloudQueueSize();

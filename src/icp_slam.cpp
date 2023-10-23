@@ -6,15 +6,21 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
     pointcloud_subscriber_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("diff_drive/pointcloud", 10, std::bind(&ICP_SLAM::pointcloudCallBack, this, std::placeholders::_1));
     imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>("diff_drive/imu", 10, std::bind(&ICP_SLAM::imuCallBack, this, std::placeholders::_1));
 
+    // Previous Point Cloud
+    prev_point_cloud_ = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
+
     // Msg Handler
     msg_handler_ = std::make_shared<MsgHandler>();
+    // ICP 
+    icp_ = std::make_shared<ICP>(); 
 }
 
 void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
     RCLCPP_INFO(get_logger(), "Received pointcloud message");
     msg_handler_->insertPointCloudMsg(msg);
     RCLCPP_INFO(get_logger(), "point cloud size is %ld", msg_handler_->getPointCloudQueueSize());
-    auto point_cloud = msg_handler_->getXYZ();
+    auto point_cloud = msg_handler_->getConvertedPointCloud();
+    pcl::copyPointCloud(*point_cloud, *prev_point_cloud_); 
     //for (pcl::PointCloud<pcl::PointXYZ>::iterator it = point_cloud->begin(); it != point_cloud->end(); ++ it) {
     //    RCLCPP_INFO(get_logger(), "point cloud x = %f, y = %f, z = %f", it->x, it->y, it->z);
     //}

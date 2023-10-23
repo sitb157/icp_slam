@@ -14,11 +14,15 @@ find_package(sensor_msgs REQUIRED)
 find_package(PCL 1.2 REQUIRED)
 find_package(pcl_conversions REQUIRED)
 
+# include eigen library
+find_package(Eigen3 3.3 REQUIRED)
+
 include_directories(
         ${PCL_INCLUDE_DIRS}
 )
 
 add_executable(icp_slam_node 
+    src/icp.cpp
     src/msg_handler.cpp
     src/icp_slam.cpp
     src/main.cpp
@@ -26,6 +30,7 @@ add_executable(icp_slam_node
 
 target_link_libraries(icp_slam_node
     ${PCL_LIBRARIES}
+    Eigen3::Eigen
 )
 
 target_compile_features(icp_slam_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
