@@ -7,6 +7,7 @@
 #include "sensor_msgs/msg/imu.hpp"
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
+#include <pcl_conversions/pcl_conversions.h>
 #include <memory>
 #include <deque>
 

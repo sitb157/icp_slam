@@ -12,6 +12,8 @@ find_package(sensor_msgs REQUIRED)
 
 # include pcl library
 find_package(PCL 1.2 REQUIRED)
+find_package(pcl_conversions REQUIRED)
+
 include_directories(
         ${PCL_INCLUDE_DIRS}
 )
@@ -36,6 +38,7 @@ target_include_directories(icp_slam_node PUBLIC
 ament_target_dependencies(icp_slam_node 
     rclcpp 
     sensor_msgs
+    pcl_conversions
 )
 
 install(TARGETS icp_slam_node
