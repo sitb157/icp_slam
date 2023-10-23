@@ -2,15 +2,15 @@
 
 MsgHandler::MsgHandler() {
     // Initialize
-    pointcloudQueue_ = std::make_shared<std::deque<sensor_msgs::msg::PointCloud2::SharedPtr>>();
+    point_cloud_queue_ = std::make_shared<std::deque<pcl::PointCloud<pcl::PointXYZ>::Ptr>>();
 }
 
-void MsgHandler::insertPointCloudMsg(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
-    pointcloudQueue_->push_back(msg);
+void MsgHandler::insertPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud) {
+    point_cloud_queue_->push_back(point_cloud);
 }
 
 size_t MsgHandler::getPointCloudQueueSize() {
-    return pointcloudQueue_->size();
+    return point_cloud_queue_->size();
 }
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::convertToXYZ(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
@@ -36,7 +36,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::convertToXYZ(const sensor_msgs::
 pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::getConvertedPointCloud() {
 
     // Get data and pop
-    const sensor_msgs::msg::PointCloud2::SharedPtr output = pointcloudQueue_->front();
-    pointcloudQueue_->pop_front(); 
-    return convertToXYZ(output);
+    auto  output = point_cloud_queue_->front();
+    point_cloud_queue_->pop_front(); 
+    return output;
 }

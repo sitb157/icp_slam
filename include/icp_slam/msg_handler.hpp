@@ -22,10 +22,13 @@ class MsgHandler {
         MsgHandler();
 
         // Insert data from callback
-        void insertPointCloudMsg(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+        void insertPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud);
         
         // Get xyz Data    
         pcl::PointCloud<pcl::PointXYZ>::Ptr getConvertedPointCloud(); 
+
+        // Convert Point Cloud Msg to XYZ
+        pcl::PointCloud<pcl::PointXYZ>::Ptr convertToXYZ(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
         // Get pointcloud queue size 
         size_t getPointCloudQueueSize();
@@ -33,10 +36,8 @@ class MsgHandler {
     private:
         
         // Storage for point cloud msgs
-        std::shared_ptr<std::deque<sensor_msgs::msg::PointCloud2::SharedPtr>> pointcloudQueue_;
+        std::shared_ptr<std::deque<pcl::PointCloud<pcl::PointXYZ>::Ptr>> point_cloud_queue_;
 
-        // Convert Point Cloud Msg to XYZ
-        pcl::PointCloud<pcl::PointXYZ>::Ptr convertToXYZ(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 };
 
 
