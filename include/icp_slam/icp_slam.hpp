@@ -25,6 +25,9 @@ class ICP_SLAM : public rclcpp::Node {
         void pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
         void imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg);
 
+
+        void frontEnd();
+
         // Thread 
         void backEnd();
 

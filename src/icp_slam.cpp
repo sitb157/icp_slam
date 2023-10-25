@@ -27,9 +27,11 @@ void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr
     if (prev_point_cloud_->empty()) { 
 
     } else {
+        frontEnd();
+        
         
     }
-    pcl::copyPointCloud(*curr_point_cloud, *prev_point_cloud_); 
+    pcl::copyPointCloud(*curr_point_cloud_, *prev_point_cloud_); 
     auto point_cloud = msg_handler_->getConvertedPointCloud();
     //for (pcl::PointCloud<pcl::PointXYZ>::iterator it = point_cloud->begin(); it != point_cloud->end(); ++ it) {
     //    RCLCPP_INFO(get_logger(), "point cloud x = %f, y = %f, z = %f", it->x, it->y, it->z);
@@ -38,4 +40,9 @@ void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr
 
 void ICP_SLAM::imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg) {
     //RCLCPP_INFO(get_logger(), "Received imu message");
+}
+
+// Get transformation between current point cloud and previous point cloud and Add factor into pose graph manager
+void ICP_SLAM::frontEnd() {
+    auto transformation = icp_->getTransformation(curr_point_cloud_, prev_point_cloud_);
 }
