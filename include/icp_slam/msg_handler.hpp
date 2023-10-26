@@ -23,6 +23,7 @@ class MsgHandler {
 
         // Insert data from callback
         void insertPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud);
+
         
         // Get xyz Data    
         pcl::PointCloud<pcl::PointXYZ>::Ptr getConvertedPointCloud(); 
