@@ -28,8 +28,11 @@ class MsgHandler {
         // Get xyz Data    
         pcl::PointCloud<pcl::PointXYZ>::Ptr getConvertedPointCloud(); 
 
-        // Convert Point Cloud Msg to XYZ
-        pcl::PointCloud<pcl::PointXYZ>::Ptr convertToXYZ(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+        // Convert ros point cloud msgs to pcl point cloud
+        pcl::PointCloud<pcl::PointXYZ>::Ptr convertToPCL(const sensor_msgs::msg::PointCloud2::SharedPtr pt_msg);
+
+        // Convert pcl point cloud to ros point cloud msgs 
+        sensor_msgs::msg::PointCloud2 convertToROS(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud);
 
         // Get pointcloud queue size 
         size_t getPointCloudQueueSize();

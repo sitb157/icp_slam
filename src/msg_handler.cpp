@@ -13,10 +13,12 @@ size_t MsgHandler::getPointCloudQueueSize() {
     return point_cloud_queue_->size();
 }
 
-pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::convertToXYZ(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+
+// Convert ros msgs to point cloud of pcl 
+pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::convertToPCL(const sensor_msgs::msg::PointCloud2::SharedPtr pt_msg) {
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr pt_dst(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::fromROSMsg(*msg, *pt_dst);
+    pcl::fromROSMsg(*pt_msg, *pt_dst);
 
     //pcl::PointCloud<pcl::PointXYZ>::Ptr pt_dst(new pcl::PointCloud<pcl::PointXYZ>);
     //const size_t num_points = msg->height * msg->width;
@@ -32,11 +34,20 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::convertToXYZ(const sensor_msgs::
     return pt_dst;
 }
 
+// Convert point cloud to ros msgs
+sensor_msgs::msg::PointCloud2 MsgHandler::convertToROS(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud) {
+
+    sensor_msgs::msg::PointCloud2 pt_msg;
+    pcl::toROSMsg(*point_cloud, pt_msg);
+
+    return pt_msg;
+}
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr MsgHandler::getConvertedPointCloud() {
 
     // Get data and pop
     auto  output = point_cloud_queue_->front();
     point_cloud_queue_->pop_front(); 
+
     return output;
 }

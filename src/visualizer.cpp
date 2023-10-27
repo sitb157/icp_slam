@@ -13,6 +13,9 @@ Visualizer::Visualizer(const std::string &node_name) : Node(node_name) {
 
 }
 
-void Visualizer::publishPointCloud() {
+// Publish Point Cloud
+void Visualizer::publishPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud) {
+    auto point_cloud_ros_msg = msg_handler_->convertToROS(point_cloud);
+    pointcloud_publisher_->publish(point_cloud_ros_msg);
     RCLCPP_INFO(this->get_logger(), "publish pointcloud");
 }

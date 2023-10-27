@@ -15,7 +15,7 @@ class Visualizer : public rclcpp::Node{
 
         Visualizer(const std::string &node_name);
 
-        void publishPointCloud();
+        void publishPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud);
 
     private: 
 

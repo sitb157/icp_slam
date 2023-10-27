@@ -27,22 +27,20 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
 void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
 
     RCLCPP_INFO(this->get_logger(), "Received pointcloud message");
-    auto curr_point_cloud_ = msg_handler_->convertToXYZ(msg);
+
+    auto curr_point_cloud_ = msg_handler_->convertToPCL(msg);
+    
     RCLCPP_INFO(this->get_logger(), "point cloud size is %ld", msg_handler_->getPointCloudQueueSize());
 
     msg_handler_->insertPointCloud(curr_point_cloud_);
     if (prev_point_cloud_->empty()) { 
 
     } else {
-        frontEnd();
-        
-        
+      //frontEnd();
     }
     pcl::copyPointCloud(*curr_point_cloud_, *prev_point_cloud_); 
-    auto point_cloud = msg_handler_->getConvertedPointCloud();
-    //for (pcl::PointCloud<pcl::PointXYZ>::iterator it = point_cloud->begin(); it != point_cloud->end(); ++ it) {
-    //    RCLCPP_INFO(get_logger(), "point cloud x = %f, y = %f, z = %f", it->x, it->y, it->z);
-    //}
+    //auto point_cloud = msg_handler_->getConvertedPointCloud();
+    visualizer_->publishPointCloud(curr_point_cloud_);
 }
 
 void ICP_SLAM::imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg) {
