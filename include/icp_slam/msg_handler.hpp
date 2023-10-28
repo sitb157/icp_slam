@@ -42,11 +42,11 @@ class MsgHandler {
         // Get pointcloud queue size 
         size_t getPointCloudQueueSize();
 
-    private:
-        
         // Storage for point cloud msgs
         std::shared_ptr<std::deque<pcl::PointCloud<pcl::PointXYZ>>> point_cloud_queue_;
 
+    private:
+        
 };
 
 

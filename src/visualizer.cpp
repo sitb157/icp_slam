@@ -26,7 +26,6 @@ void Visualizer::visualizePointCloud(const pcl::PointCloud<pcl::PointXYZ> point_
 void Visualizer::publishPointCloud(const sensor_msgs::msg::PointCloud2 msg) {
 
     pointcloud_publisher_->publish(msg);
-    RCLCPP_INFO(this->get_logger(), "publish pointcloud");
 
 }
 
@@ -47,11 +46,6 @@ pcl::PointCloud<pcl::PointXYZRGB> Visualizer::colorizePointCloud(const pcl::Poin
         colorized_point_cloud.points[i].g = g;
         colorized_point_cloud.points[i].b = b;
     }
-    //sensor_msgs::PointCloud2Iterator<uint8_t> iter_rgb(src, "rgb");
-    //for (; iter_rgb != iter_rgb.end(); ++iter_rgb) {
-    //    uint32_t new_rgb = (static_cast<uint32_t>(r) << 16) | (static_cast<uint32_t>(g) << 8) | static_cast<uint32_t>(b);
-    //    *iter_rgb = reinterpret_cast<uint8_t*>(&new_rgb)[0];
-    //}
 
     return colorized_point_cloud;
 

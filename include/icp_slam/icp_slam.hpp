@@ -16,7 +16,7 @@ class ICP_SLAM : public rclcpp::Node {
     public:
 
         ICP_SLAM(const std::string &node_name);
-        //~ICP_SLAM();
+        ~ICP_SLAM();
 
     private:
 
@@ -26,7 +26,7 @@ class ICP_SLAM : public rclcpp::Node {
 
         void frontEnd();
 
-        // Thread 
+        // Backend Function 
         void backEnd();
 
         rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_subscriber_;
@@ -36,6 +36,9 @@ class ICP_SLAM : public rclcpp::Node {
         std::shared_ptr<Visualizer> visualizer_;
         std::shared_ptr<MsgHandler> msg_handler_;
         std::shared_ptr<ICP> icp_;
+        
+        // Backend Thread
+        std::thread back_end_thread_;
         
 };
 
