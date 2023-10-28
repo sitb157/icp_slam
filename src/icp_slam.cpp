@@ -8,9 +8,8 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
     pointcloud_subscriber_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("diff_drive/pointcloud", 10, std::bind(&ICP_SLAM::pointcloudCallBack, this, std::placeholders::_1));
     imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>("diff_drive/imu", 10, std::bind(&ICP_SLAM::imuCallBack, this, std::placeholders::_1));
 
-    // Current and Previous Point Cloud
-    prev_point_cloud_ = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
-    curr_point_cloud_ = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
+    // Previous Point Cloud
+    prev_point_cloud_ = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
 
     // Visualizer
     visualizer_ = std::make_shared<Visualizer>(node_name + "_visualizer");
@@ -38,9 +37,9 @@ void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr
     } else {
       //frontEnd();
     }
-    pcl::copyPointCloud(*curr_point_cloud_, *prev_point_cloud_); 
+    pcl::copyPointCloud(curr_point_cloud_, *prev_point_cloud_); 
     //auto point_cloud = msg_handler_->getConvertedPointCloud();
-    visualizer_->publishPointCloud(curr_point_cloud_);
+    visualizer_->visualizePointCloud(curr_point_cloud_, 255, 255, 0);
 }
 
 void ICP_SLAM::imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg) {
@@ -49,5 +48,9 @@ void ICP_SLAM::imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg) {
 
 // Get transformation between current point cloud and previous point cloud and Add factor into pose graph manager
 void ICP_SLAM::frontEnd() {
-    auto transformation = icp_->getTransformation(curr_point_cloud_, prev_point_cloud_);
+    pcl::VoxelGrid<pcl::PointXYZ> sor;
+    //sor.setInputCloud(curr_point_cloud_);
+    //sor.setLeafSize(0.01f, 0.01f, 0.01f);
+    ////pcl::PointCloud
+    //auto transformation = icp_->getTransformation(curr_point_cloud_, prev_point_cloud_);
 }

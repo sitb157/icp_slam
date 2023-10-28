@@ -13,16 +13,28 @@ class Visualizer : public rclcpp::Node{
 
     public:
 
+        // Initialize
         Visualizer(const std::string &node_name);
 
-        void publishPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud);
+        // Visualize Point Cloud
+        void visualizePointCloud(const pcl::PointCloud<pcl::PointXYZ> point_cloud, uint8_t r, uint8_t g, uint8_t b);
 
     private: 
 
+        // Publisher
         rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_publisher_;
 
-        std::shared_ptr<MsgHandler>  msg_handler_;
+        // Massages handler
+        std::shared_ptr<MsgHandler> msg_handler_;
 
+        // ROS Point Cloud Msg
+        sensor_msgs::msg::PointCloud2::SharedPtr point_cloud_ros_msg_;
+
+        // Publish Point Cloud
+        void publishPointCloud(sensor_msgs::msg::PointCloud2 colorized_point_cloud);
+
+        // Colorize Point Cloud
+        pcl::PointCloud<pcl::PointXYZRGB> colorizePointCloud(const pcl::PointCloud<pcl::PointXYZ> point_cloud, uint8_t r, uint8_t g, uint8_t b);
 };
 
 #endif // VISUALIZER_HPP_

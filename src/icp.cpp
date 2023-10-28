@@ -20,3 +20,4 @@ Eigen::Matrix4f ICP::getTransformation(pcl::PointCloud<pcl::PointXYZ>::Ptr src, 
 
     return icp_lib_.getFinalTransformation();
 }
+

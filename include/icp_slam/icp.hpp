@@ -6,8 +6,8 @@
  */
 
 #include <pcl/point_types.h> 
-#include <pcl/visualization/cloud_viewer.h>
 #include <pcl/registration/icp.h>
+#include <pcl/filters/voxel_grid.h>
 #include <Eigen/Dense>
 
 class ICP {
