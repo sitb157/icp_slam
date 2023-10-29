@@ -40,7 +40,7 @@ void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr
 
     auto curr_point_cloud_ = msg_handler_->convertToPCL(msg);
     
-    //RCLCPP_INFO(this->get_logger(), "point cloud size is %ld", msg_handler_->getPointCloudQueueSize());
+    RCLCPP_INFO(this->get_logger(), "point cloud size is %ld", msg_handler_->getPointCloudQueueSize());
 
     msg_handler_->insertPointCloud(curr_point_cloud_);
     if (prev_point_cloud_->empty()) { 
@@ -70,8 +70,16 @@ void ICP_SLAM::frontEnd() {
 void ICP_SLAM::backEnd() {
     while (rclcpp::ok()) {
         //RCLCPP_INFO(this->get_logger(), "Run Thread");
+        pcl::PointCloud<pcl::PointXYZ> temp;
+        temp.header = prev_point_cloud_->header;
         for (std::deque<pcl::PointCloud<pcl::PointXYZ>>::iterator it = msg_handler_->point_cloud_queue_->begin(); it != msg_handler_->point_cloud_queue_->end(); ++it) {
-            //visualizer_->visualizePointCloud(*it, 255, 0, 255);
+            if (it->empty() == false) {
+                for (size_t i = 0; i < it->size(); ++i) {
+                    temp.push_back(it->points[i]);
+                }
+            }
         }
+
+        visualizer_->visualizePointCloud(temp, 255, 0, 255);
     }
 }
