@@ -24,14 +24,15 @@ class MsgHandler {
         MsgHandler();
 
         // Insert data from callback
-        void insertPointCloud(const pcl::PointCloud<pcl::PointXYZ> point_cloud);
+        void insertPointCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud);
 
-        
         // Get xyz Data    
-        pcl::PointCloud<pcl::PointXYZ> getConvertedPointCloud(); 
+        pcl::PointCloud<pcl::PointXYZ>::Ptr getConvertedPointCloud(); 
+        // Point Cloud Down sampling with voxel filter 
+        pcl::PointCloud<pcl::PointXYZ>::Ptr downSamplingPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr src, float voxel_size);
 
         // Convert ros point cloud msgs to pcl point cloud
-        pcl::PointCloud<pcl::PointXYZ> convertToPCL(const sensor_msgs::msg::PointCloud2::SharedPtr pt_msg);
+        pcl::PointCloud<pcl::PointXYZ>::Ptr convertToPCL(const sensor_msgs::msg::PointCloud2::SharedPtr pt_msg);
 
         // Convert pcl point cloud to ros point cloud msgs 
         sensor_msgs::msg::PointCloud2 convertToROS(const pcl::PointCloud<pcl::PointXYZ> src);
@@ -43,7 +44,7 @@ class MsgHandler {
         size_t getPointCloudQueueSize();
 
         // Storage for point cloud msgs
-        std::shared_ptr<std::deque<pcl::PointCloud<pcl::PointXYZ>>> point_cloud_queue_;
+        std::shared_ptr<std::deque<pcl::PointCloud<pcl::PointXYZ>::Ptr>> point_cloud_queue_;
 
     private:
         

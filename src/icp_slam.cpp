@@ -8,7 +8,8 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
     pointcloud_subscriber_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("diff_drive/pointcloud", 10, std::bind(&ICP_SLAM::pointcloudCallBack, this, std::placeholders::_1));
     imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>("diff_drive/imu", 10, std::bind(&ICP_SLAM::imuCallBack, this, std::placeholders::_1));
 
-    // Previous Point Cloud
+    // Current and Previous Point Cloud
+    curr_point_cloud_ = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
     prev_point_cloud_ = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
 
     // Visualizer
@@ -38,7 +39,7 @@ void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr
 
     //RCLCPP_INFO(this->get_logger(), "Received pointcloud message");
 
-    auto curr_point_cloud_ = msg_handler_->convertToPCL(msg);
+    curr_point_cloud_ = msg_handler_->convertToPCL(msg);
     
     RCLCPP_INFO(this->get_logger(), "point cloud size is %ld", msg_handler_->getPointCloudQueueSize());
 
@@ -46,11 +47,9 @@ void ICP_SLAM::pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr
     if (prev_point_cloud_->empty()) { 
 
     } else {
-        //visualizer_->visualizePointCloud(curr_point_cloud_, 255, 255, 0);
-        //visualizer_->visualizePointCloud(*prev_point_cloud_, 0, 255, 0);
-      //frontEnd();
+        frontEnd();
     }
-    pcl::copyPointCloud(curr_point_cloud_, *prev_point_cloud_); 
+    pcl::copyPointCloud(*curr_point_cloud_, *prev_point_cloud_); 
     //auto point_cloud = msg_handler_->getConvertedPointCloud();
 }
 
@@ -60,26 +59,14 @@ void ICP_SLAM::imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg) {
 
 // Get transformation between current point cloud and previous point cloud and Add factor into pose graph manager
 void ICP_SLAM::frontEnd() {
-    pcl::VoxelGrid<pcl::PointXYZ> sor;
-    //sor.setInputCloud(curr_point_cloud_);
-    //sor.setLeafSize(0.01f, 0.01f, 0.01f);
-    ////pcl::PointCloud
+
+    auto cloud_downsampled = msg_handler_->downSamplingPointCloud(curr_point_cloud_, 0.1f);
+    visualizer_->visualizePointCloud(*cloud_downsampled, 255, 0, 255);
     //auto transformation = icp_->getTransformation(curr_point_cloud_, prev_point_cloud_);
 }
 
 void ICP_SLAM::backEnd() {
     while (rclcpp::ok()) {
         //RCLCPP_INFO(this->get_logger(), "Run Thread");
-        pcl::PointCloud<pcl::PointXYZ> temp;
-        temp.header = prev_point_cloud_->header;
-        for (std::deque<pcl::PointCloud<pcl::PointXYZ>>::iterator it = msg_handler_->point_cloud_queue_->begin(); it != msg_handler_->point_cloud_queue_->end(); ++it) {
-            if (it->empty() == false) {
-                for (size_t i = 0; i < it->size(); ++i) {
-                    temp.push_back(it->points[i]);
-                }
-            }
-        }
-
-        visualizer_->visualizePointCloud(temp, 255, 0, 255);
     }
 }

@@ -31,6 +31,8 @@ class ICP_SLAM : public rclcpp::Node {
 
         rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_subscriber_;
         rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_subscriber_;
+
+        pcl::PointCloud<pcl::PointXYZ>::Ptr curr_point_cloud_;
         pcl::PointCloud<pcl::PointXYZ>::Ptr prev_point_cloud_;
 
         std::shared_ptr<Visualizer> visualizer_;
