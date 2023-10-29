@@ -23,7 +23,7 @@ include_directories(
 
 add_executable(icp_slam_node 
     src/msg_handler.cpp
-    src/icp.cpp
+    #src/icp.cpp
     src/visualizer.cpp
     src/icp_slam.cpp
     src/main.cpp
