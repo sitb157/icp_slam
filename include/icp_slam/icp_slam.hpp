@@ -23,7 +23,6 @@ class ICP_SLAM : public rclcpp::Node {
         void pointcloudCallBack(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
         void imuCallBack(const sensor_msgs::msg::Imu::SharedPtr msg);
 
-
         void frontEnd();
 
         // Backend Function 
@@ -35,13 +34,19 @@ class ICP_SLAM : public rclcpp::Node {
         pcl::PointCloud<pcl::PointXYZ>::Ptr curr_point_cloud_;
         pcl::PointCloud<pcl::PointXYZ>::Ptr prev_point_cloud_;
 
+        // point cloud Visualizer
         std::shared_ptr<Visualizer> visualizer_;
+
+        // point cloud Visualizer for debugging
+        std::shared_ptr<Visualizer> result_visualizer_;
+
         std::shared_ptr<MsgHandler> msg_handler_;
-        std::shared_ptr<ICP> icp_;
         
         // Backend Thread
         std::thread back_end_thread_;
-        
+
+        // ICP
+        pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>::Ptr icp_;
 };
 
 #endif // ICP_SLAM_HPP_

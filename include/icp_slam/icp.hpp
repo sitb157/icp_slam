@@ -14,7 +14,9 @@ class ICP {
     public:
         ICP();
         
-        Eigen::Matrix4f getTransformation(pcl::PointCloud<pcl::PointXYZ>::Ptr src, pcl::PointCloud<pcl::PointXYZ>::Ptr dst);
+        //Eigen::Matrix4f getTransformation(pcl::PointCloud<pcl::PointXYZ>::Ptr src, pcl::PointCloud<pcl::PointXYZ>::Ptr dst);
+
+        void getTransformation(pcl::PointCloud<pcl::PointXYZ>::Ptr src, pcl::PointCloud<pcl::PointXYZ>::Ptr dst);
 
     private:
 

@@ -4,7 +4,7 @@
 Visualizer::Visualizer(const std::string &node_name) : Node(node_name) {
 
     // Publisher
-    pointcloud_publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("result_point_cloud", 10);
+    pointcloud_publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(node_name + "/point_cloud", 10);
     
     // Set parameter for visualizer
 
