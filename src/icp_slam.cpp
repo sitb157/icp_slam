@@ -1,6 +1,5 @@
 #include "icp_slam/icp_slam.hpp"
 
-
 // Initialize
 ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
 

@@ -10,11 +10,18 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-# include pcl library
+# pcl library
 find_package(PCL 1.2 REQUIRED)
 find_package(pcl_conversions REQUIRED)
 
-# include eigen library
+# G2O library
+find_package(g2o REQUIRED
+    COMPONENTS
+    g2o::core
+    g2o::solver_eigen
+)
+
+# eigen library
 find_package(Eigen3 3.3 REQUIRED)
 
 include_directories(
@@ -24,6 +31,7 @@ include_directories(
 add_executable(icp_slam_node 
     src/msg_handler.cpp
     #src/icp.cpp
+    src/graph_optimizer.cpp
     src/visualizer.cpp
     src/icp_slam.cpp
     src/main.cpp
@@ -32,6 +40,8 @@ add_executable(icp_slam_node
 target_link_libraries(icp_slam_node
     ${PCL_LIBRARIES}
     Eigen3::Eigen
+    g2o::core
+    g2o::solver_eigen
 )
 
 target_compile_features(icp_slam_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
