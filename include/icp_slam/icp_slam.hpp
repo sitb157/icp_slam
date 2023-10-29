@@ -9,6 +9,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include "icp_slam/visualizer.hpp"
 #include "icp_slam/msg_handler.hpp"
+#include <pcl/registration/icp.h>
 //#include "icp_slam/icp.hpp"
 
 class ICP_SLAM : public rclcpp::Node {
