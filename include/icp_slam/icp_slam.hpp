@@ -9,6 +9,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include "icp_slam/visualizer.hpp"
 #include "icp_slam/msg_handler.hpp"
+#include "icp_slam/graph_optimizer.hpp"
 #include <pcl/registration/icp.h>
 //#include "icp_slam/icp.hpp"
 
@@ -41,7 +42,11 @@ class ICP_SLAM : public rclcpp::Node {
         // point cloud Visualizer for debugging
         std::shared_ptr<Visualizer> result_visualizer_;
 
+        // Data handler
         std::shared_ptr<MsgHandler> msg_handler_;
+
+        // Graph Optimizer in backend
+        std::shared_ptr<GraphOptimizer> graph_optimizer_;
         
         // Backend Thread
         std::thread back_end_thread_;

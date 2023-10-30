@@ -20,6 +20,10 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
     // Msg Handler
     msg_handler_ = std::make_shared<MsgHandler>();
 
+    // Graph Optimizer
+    graph_optimizer_ = std::make_shared<GraphOptimizer>();
+
+
     // ICP
     icp_ = std::make_shared<pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>>();
 
