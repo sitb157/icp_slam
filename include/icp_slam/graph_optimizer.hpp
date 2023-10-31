@@ -21,6 +21,7 @@ class GraphOptimizer {
         void addEdge();
 
         std::shared_ptr<g2o::SparseOptimizer> optimizer_;
+        std::unique_ptr<g2o::LinearSolverDense<g2o::BlockSolver_6_3::PoseMatrixType>> linear_solver_;
         g2o::OptimizationAlgorithmLevenberg* solver_;
 
 };
