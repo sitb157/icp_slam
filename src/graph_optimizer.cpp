@@ -4,8 +4,10 @@
 GraphOptimizer::GraphOptimizer() {
 
     optimizer_ = std::make_shared<g2o::SparseOptimizer>();
-    solver_property_ = std::make_shared<g2o::OptimizationAlgorithmProperty>();
-    optimizer_->setAlgorithm(g2o::OptimizationAlgorithmFactory::instance()->construct("lm_var", *solver_property_));
+    optimizer_->setVerbose(true);
+    auto linear_solver = g2o::make_unique<g2o::LinearSolverDense<g2o::BlockSolver_6_3::PoseMatrixType>>();
+    solver_ = new g2o::OptimizationAlgorithmLevenberg(g2o::make_unique<g2o::BlockSolver_6_3>(std::move(linear_solver)));
+    optimizer_->setAlgorithm(solver_);
     optimizer_->initializeOptimization();
     optimizer_->optimize(10);
 

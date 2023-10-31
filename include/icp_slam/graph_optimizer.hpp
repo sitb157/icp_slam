@@ -6,8 +6,10 @@
  */
 
 #include <g2o/core/sparse_optimizer.h>
-#include <g2o/core/optimization_algorithm_factory.h>
+#include <g2o/core/optimization_algorithm_levenberg.h>
 #include <g2o/core/block_solver.h>
+#include <g2o/core/solver.h>
+#include <g2o/solvers/dense/linear_solver_dense.h>
 
 class GraphOptimizer {
 
@@ -19,7 +21,7 @@ class GraphOptimizer {
         void addEdge();
 
         std::shared_ptr<g2o::SparseOptimizer> optimizer_;
-        std::shared_ptr<g2o::OptimizationAlgorithmProperty> solver_property_;
+        g2o::OptimizationAlgorithmLevenberg* solver_;
 
 };
 
