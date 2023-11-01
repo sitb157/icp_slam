@@ -8,7 +8,15 @@ GraphOptimizer::GraphOptimizer() {
     linear_solver_ = g2o::make_unique<g2o::LinearSolverDense<g2o::BlockSolver_6_3::PoseMatrixType>>();
     solver_ = new g2o::OptimizationAlgorithmLevenberg(g2o::make_unique<g2o::BlockSolver_6_3>(std::move(linear_solver_)));
     optimizer_->setAlgorithm(solver_);
-    optimizer_->initializeOptimization();
-    optimizer_->optimize(10);
+}
 
+void addVertex() {
+}
+
+void addEdge() {
+}
+
+void optimize() {
+    optimizer_->initializeOptimization();
+    optimizer_->optimize(100);
 }
