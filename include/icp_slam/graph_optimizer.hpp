@@ -17,8 +17,9 @@ class GraphOptimizer {
         GraphOptimizer();
 
     private:
-        void addPoseToGraph();
+        void addVertex();
         void addEdge();
+        void optimize();
 
         std::shared_ptr<g2o::SparseOptimizer> optimizer_;
         std::unique_ptr<g2o::LinearSolverDense<g2o::BlockSolver_6_3::PoseMatrixType>> linear_solver_;
