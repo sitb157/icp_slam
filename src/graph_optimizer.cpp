@@ -10,13 +10,18 @@ GraphOptimizer::GraphOptimizer() {
     optimizer_->setAlgorithm(solver_);
 }
 
-void addVertex() {
+void GraphOptimizer::addVertex() {
+    //g2o::PoseVertex* v1 = new g2o::PoseVertex();
+    //v1-> setId();
+    //g2o::PoseVertex* v2 = new g2o::PoseVertex();
+    //v2->setId();
 }
 
-void addEdge() {
+void GraphOptimizer::addEdge() {
+    //g2o::PoseEdge* edge = new PoseEdge();
 }
 
-void optimize() {
+void GraphOptimizer::optimize() {
     optimizer_->initializeOptimization();
     optimizer_->optimize(100);
 }
