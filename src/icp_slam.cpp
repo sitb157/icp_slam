@@ -10,6 +10,8 @@ ICP_SLAM::ICP_SLAM(const std::string &node_name) : Node(node_name) {
     // Current and Previous Point Cloud
     curr_point_cloud_ = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
     prev_point_cloud_ = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
+    // Vertex id
+    id_ = -1;
 
     // point cloud Visualizer
     visualizer_ = std::make_shared<Visualizer>(node_name + "_visualizer");
@@ -87,6 +89,25 @@ void ICP_SLAM::frontEnd() {
     icp_->setInputSource(curr_downsampled_point_cloud);
     icp_->setInputTarget(prev_downsampled_point_cloud);
     icp_->align(*align);
+
+    if (icp_.hasConverged()) {
+        // If ICP converged, the transformation matrix can be retrieved
+        Eigen::Matrix4f icp_transformation = icp_.getFinalTransformation();
+        // Now you can use icp_transformation for further processing
+        //
+        // Convert Eigen::Matrix4f (ICP output) to Eigen::Matrix4d
+        Eigen::Matrix4d icp_transformation_d = icp_transformation.cast<double>();
+
+        // Extract rotation (as a 3x3 matrix) and translation (as a 3x1 vector)
+        Eigen::Matrix3d rotation = icp_transformation_d.block<3,3>(0,0);
+        Eigen::Vector3d translation = icp_transformation_d.block<3,1>(0,3);
+        
+        // Create a g2o::SE3Quat from the rotation and translation
+        g2o::SE3Quat pose_estimate(rotation, translation);
+        graph_optimizer_->addVertex(pose_estimate, id_);
+    } else {
+        std::cerr << "ICP did not converge." << std::endl;
+    }
     visualizer_->visualizePointCloud(*curr_point_cloud_, 255, 0, 255);
     result_visualizer_->visualizePointCloud(*align, 0, 0, 255);
 

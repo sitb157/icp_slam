@@ -35,6 +35,7 @@ class ICP_SLAM : public rclcpp::Node {
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr curr_point_cloud_;
         pcl::PointCloud<pcl::PointXYZ>::Ptr prev_point_cloud_;
+        size_t id_;
 
         // point cloud Visualizer
         std::shared_ptr<Visualizer> visualizer_;

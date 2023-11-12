@@ -10,9 +10,12 @@ GraphOptimizer::GraphOptimizer() {
     optimizer_->setAlgorithm(solver_);
 }
 
-void GraphOptimizer::addVertex(const g2o::SE2& pose) {
-    g2o::Vertexse* vertex = new g2o::VertexSE2();
-    vertex->setID();
+void GraphOptimizer::addVertex(const g2o::SE3Quat& pose, int id) {
+    g2o::VertexSE2* vertex = new g2o::VertexSE2();
+    vertex->setID(id);
+    if (id == 0) {
+        vertex->setFixed(true);
+    }
     vertex->setEstimate(pose);
     optimizer_->addVertex(vertex);
 }
@@ -26,10 +29,9 @@ void GraphOptimizer::addEdge() {
     edge->setVertex(1, vertex2);
 
     edge->setMeasurement();
-
     edge->setInformation();
 
-    optmizier_->addEdge(edge);
+    optimizer_->addEdge(edge);
 }
 
 void GraphOptimizer::optimize() {
