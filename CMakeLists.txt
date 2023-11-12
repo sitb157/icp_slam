@@ -19,6 +19,7 @@ find_package(g2o REQUIRED
     COMPONENTS
     g2o::core
     g2o::solver_eigen
+    g2o::types_slam2d
 )
 
 # eigen library
@@ -42,6 +43,7 @@ target_link_libraries(icp_slam_node
     Eigen3::Eigen
     g2o::core
     g2o::solver_eigen
+    g2o::types_slam2d
 )
 
 target_compile_features(icp_slam_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17

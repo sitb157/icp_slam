@@ -90,21 +90,24 @@ void ICP_SLAM::frontEnd() {
     icp_->setInputTarget(prev_downsampled_point_cloud);
     icp_->align(*align);
 
-    if (icp_.hasConverged()) {
+    if (icp_->hasConverged()) {
         // If ICP converged, the transformation matrix can be retrieved
-        Eigen::Matrix4f icp_transformation = icp_.getFinalTransformation();
+        Eigen::Matrix4f icp_transformation = icp_->getFinalTransformation();
         // Now you can use icp_transformation for further processing
         //
         // Convert Eigen::Matrix4f (ICP output) to Eigen::Matrix4d
         Eigen::Matrix4d icp_transformation_d = icp_transformation.cast<double>();
 
         // Extract rotation (as a 3x3 matrix) and translation (as a 3x1 vector)
-        Eigen::Matrix3d rotation = icp_transformation_d.block<3,3>(0,0);
-        Eigen::Vector3d translation = icp_transformation_d.block<3,1>(0,3);
+        Eigen::Matrix3d rotation_matrix = icp_transformation_d.block<3,3>(0,0);
+        Eigen::Vector3d translation_vector = icp_transformation_d.block<3,1>(0,3);
         
-        // Create a g2o::SE3Quat from the rotation and translation
-        g2o::SE3Quat pose_estimate(rotation, translation);
-        graph_optimizer_->addVertex(pose_estimate, id_);
+        g2o::SE2 pose_estimate;
+        // Convert rotation to Euler Angles
+        pose_estimate.fromVector(Eigen::Vector3d(rotation_matrix.eulerAngles(0, 1, 2)));
+        pose_estimate.setTranslation(Eigen::Vector2d(translation_vector.x(), translation_vector.y()));
+
+        graph_optimizer_->addVertex(pose_estimate, id_++);
     } else {
         std::cerr << "ICP did not converge." << std::endl;
     }
